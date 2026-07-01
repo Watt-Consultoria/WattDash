@@ -170,7 +170,7 @@ export function CandidatesTab() {
                 candidate={c}
                 currentStageName={getStageLabel(c.current_stage_id)}
                 canEdit={canEdit}
-                hasInterview={bookedEmails.has(c.email)}
+                interviewInfo={interviewInfoByEmail.get(c.email)}
                 canShowInterviewStatus={canEdit || bookedEmails.has(c.email)}
                 onOpen={() => setSheetCandidate(c)}
               />

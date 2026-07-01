@@ -48,7 +48,7 @@ interface CandidateCardProps {
   candidate: Candidate;
   currentStageName?: string;
   canEdit: boolean;
-  hasInterview?: boolean;
+  interviewInfo?: CandidateInterviewInfo;
   canShowInterviewStatus?: boolean;
   onOpen: () => void;
 }
@@ -57,7 +57,7 @@ export function CandidateCard({
   candidate,
   currentStageName,
   canEdit,
-  hasInterview,
+  interviewInfo,
   canShowInterviewStatus,
   onOpen
 }: CandidateCardProps) {
@@ -65,6 +65,8 @@ export function CandidateCard({
   const updateMutation = SelectionProcessRepository.useUpdateCandidate();
   const isPending = updateMutation.isPending;
   const isActive = candidate.status === 'active';
+  const hasInterview = !!interviewInfo;
+  const interviewDone = !!interviewInfo && new Date(interviewInfo.endsAt) < new Date();
 
   function handleAction(e: React.MouseEvent, status: 'approved' | 'reproved') {
     e.stopPropagation();
@@ -139,13 +141,23 @@ export function CandidateCard({
           {canShowInterviewStatus &&
             isActive &&
             (hasInterview ? (
-              <Badge
-                variant='outline'
-                className='border-emerald-300 text-emerald-700 dark:border-emerald-700 dark:text-emerald-400 text-[0.65rem] px-1.5 py-0 h-5 gap-1'
-              >
-                <Icons.calendar className='size-2.5' />
-                Entrevista marcada
-              </Badge>
+              interviewDone ? (
+                <Badge
+                  variant='outline'
+                  className='border-sky-300 text-sky-700 dark:border-sky-700 dark:text-sky-400 text-[0.65rem] px-1.5 py-0 h-5 gap-1'
+                >
+                  <Icons.circleCheck className='size-2.5' />
+                  Entrevista realizada
+                </Badge>
+              ) : (
+                <Badge
+                  variant='outline'
+                  className='border-emerald-300 text-emerald-700 dark:border-emerald-700 dark:text-emerald-400 text-[0.65rem] px-1.5 py-0 h-5 gap-1'
+                >
+                  <Icons.calendar className='size-2.5' />
+                  Entrevista marcada
+                </Badge>
+              )
             ) : (
               <Badge
                 variant='outline'
@@ -234,6 +246,7 @@ export function CandidateSheet({
 
   const isPending = updateMutation.isPending;
   const isActive = candidate.status === 'active';
+  const interviewDone = !!interviewInfo && new Date(interviewInfo.endsAt) < new Date();
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -311,10 +324,26 @@ export function CandidateSheet({
 
         {/* Interview info — shown only when a booking exists */}
         {interviewInfo && (
-          <div className='mb-5 rounded-xl border border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/20 p-4 space-y-3'>
-            <p className='text-sm font-semibold text-emerald-700 dark:text-emerald-400 flex items-center gap-2'>
-              <Icons.calendar className='size-4 shrink-0' />
-              Entrevista agendada
+          <div
+            className={
+              interviewDone
+                ? 'mb-5 rounded-xl border border-sky-200 dark:border-sky-800 bg-sky-50 dark:bg-sky-950/20 p-4 space-y-3'
+                : 'mb-5 rounded-xl border border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/20 p-4 space-y-3'
+            }
+          >
+            <p
+              className={
+                interviewDone
+                  ? 'text-sm font-semibold text-sky-700 dark:text-sky-400 flex items-center gap-2'
+                  : 'text-sm font-semibold text-emerald-700 dark:text-emerald-400 flex items-center gap-2'
+              }
+            >
+              {interviewDone ? (
+                <Icons.circleCheck className='size-4 shrink-0' />
+              ) : (
+                <Icons.calendar className='size-4 shrink-0' />
+              )}
+              {interviewDone ? 'Entrevista realizada' : 'Entrevista agendada'}
             </p>
             <div className='space-y-2 text-sm'>
               <div className='flex items-start gap-2.5'>
