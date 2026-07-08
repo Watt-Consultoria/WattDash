@@ -57,7 +57,7 @@ function EmailRecipientCard({ candidate, stageName, selected, onToggle }: EmailR
     >
       <span
         className={cn(
-          'mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-[4px] border shadow-xs transition-colors',
+          'mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-lg border shadow-xs transition-colors',
           selected ? 'border-primary bg-primary text-primary-foreground' : 'border-input'
         )}
       >

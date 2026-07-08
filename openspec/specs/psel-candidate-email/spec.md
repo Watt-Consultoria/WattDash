@@ -16,7 +16,11 @@ O sistema SHALL exibir uma aba "E-mail" na página `/psel`, ao lado das abas Pro
 - **THEN** o estado de seleção/filtro de uma aba não afeta o comportamento da outra (são independentes)
 
 ### Requirement: Seleção de candidatos na aba "E-mail"
-A aba "E-mail" SHALL permitir que o usuário selecione múltiplos candidatos como destinatários, usando os mesmos filtros de processo e etapa disponíveis na aba "Candidatos", através de checkboxes por candidato.
+A aba "E-mail" SHALL permitir que o usuário selecione múltiplos candidatos como destinatários, usando os mesmos filtros de processo e etapa disponíveis na aba "Candidatos", através de checkboxes por candidato, exibidos em cartões simplificados (sem foto).
+
+#### Scenario: Cartão de destinatário simplificado
+- **WHEN** a lista de candidatos é exibida na aba "E-mail"
+- **THEN** cada cartão exibe apenas checkbox, nome, curso, período e etapa atual do candidato, sem exibir a foto (diferente dos cartões da aba "Candidatos")
 
 #### Scenario: Selecionar candidatos individualmente
 - **WHEN** o usuário marca a checkbox de um ou mais candidatos na lista da aba "E-mail"
@@ -76,9 +80,9 @@ O corpo do e-mail enviado SHALL ser renderizado dentro de um frame HTML com a me
 - **WHEN** o e-mail é enviado
 - **THEN** o campo `plain_text` enviado à API corresponde ao texto puro digitado pelo usuário, sem marcação HTML
 
-#### Scenario: Conteúdo do usuário é escapado no HTML
-- **WHEN** o corpo do e-mail contém caracteres especiais de HTML (`<`, `>`, `&`)
-- **THEN** esses caracteres SHALL ser escapados no HTML final, exibidos como texto literal e não interpretados como marcação
+#### Scenario: Tags HTML no corpo são renderizadas
+- **WHEN** o corpo do e-mail contém tags HTML (ex: `<b>`, `<a href="">`, `<br>`)
+- **THEN** essas tags SHALL ser preservadas sem escapar no HTML final e renderizadas como marcação pelo cliente de e-mail (o assunto continua sendo escapado)
 
 #### Scenario: Quebras de parágrafo automáticas
 - **WHEN** o usuário separa o corpo do e-mail em blocos com linha em branco entre eles
