@@ -212,3 +212,17 @@ export interface InterviewEvaluationWithCandidate extends InterviewEvaluationRes
   candidate_id: string;
   candidate_name: string;
 }
+
+// ─── Candidate Email ─────────────────────────────────────────────────────────
+
+export interface SendCandidateEmailPayload {
+  candidate_ids: string[];
+  subject: string;
+  html: string;
+  plain_text: string;
+}
+
+export interface SendCandidateEmailResult {
+  successes: number;
+  errors: number;
+}

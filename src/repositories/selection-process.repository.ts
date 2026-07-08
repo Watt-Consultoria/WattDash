@@ -21,7 +21,9 @@ import type {
   SendMeetLinkPayload,
   CreateEvaluationPayload,
   InterviewEvaluationResponse,
-  InterviewEvaluationWithCandidate
+  InterviewEvaluationWithCandidate,
+  SendCandidateEmailPayload,
+  SendCandidateEmailResult
 } from '@/types/selection-process';
 
 export const selectionProcessKeys = {
@@ -385,6 +387,22 @@ function useEvaluations(processId?: string) {
   });
 }
 
+// ─── Candidate Email ─────────────────────────────────────────────────────────
+
+async function sendCandidateEmail(
+  token: string,
+  payload: SendCandidateEmailPayload
+): Promise<SendCandidateEmailResult> {
+  return apiPost<SendCandidateEmailResult>('/selection-process/send-email', token, payload);
+}
+
+function useSendCandidateEmail() {
+  const token = useAccessToken();
+  return useMutation({
+    mutationFn: (payload: SendCandidateEmailPayload) => sendCandidateEmail(token, payload)
+  });
+}
+
 export const SelectionProcessRepository = {
   keys: selectionProcessKeys,
   useProcesses,
@@ -403,5 +421,6 @@ export const SelectionProcessRepository = {
   useSendInterviewLinks,
   useSendMeetLink,
   useSubmitEvaluation,
-  useEvaluations
+  useEvaluations,
+  useSendCandidateEmail
 };

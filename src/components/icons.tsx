@@ -58,6 +58,7 @@ import {
   IconLock,
   IconLogin,
   IconLogout,
+  IconMail,
   IconMessage,
   IconMinus,
   IconMoon,
@@ -183,6 +184,7 @@ export const Icons = {
   phone: IconPhone,
   video: IconVideo,
   send: IconSend,
+  mail: IconMail,
   paperclip: IconPaperclip,
 
   // Files

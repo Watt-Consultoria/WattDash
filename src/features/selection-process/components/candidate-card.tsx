@@ -14,6 +14,7 @@ import { Badge } from '@/components/ui/badge';
 import { Icons } from '@/components/icons';
 import { SelectionProcessRepository } from '@/repositories/selection-process.repository';
 import { toUserMessage } from '@/lib/api-client';
+import { cn } from '@/lib/utils';
 import { CandidateStatusBadge } from './candidate-status-badge';
 import { PhotoLightbox } from './photo-lightbox';
 import type { Candidate } from '@/types/selection-process';
@@ -51,6 +52,9 @@ interface CandidateCardProps {
   interviewInfo?: CandidateInterviewInfo;
   canShowInterviewStatus?: boolean;
   onOpen: () => void;
+  selectable?: boolean;
+  selected?: boolean;
+  onToggleSelect?: () => void;
 }
 
 export function CandidateCard({
@@ -59,7 +63,10 @@ export function CandidateCard({
   canEdit,
   interviewInfo,
   canShowInterviewStatus,
-  onOpen
+  onOpen,
+  selectable,
+  selected,
+  onToggleSelect
 }: CandidateCardProps) {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const updateMutation = SelectionProcessRepository.useUpdateCandidate();
@@ -83,8 +90,34 @@ export function CandidateCard({
   return (
     <div
       onClick={onOpen}
-      className='group relative overflow-hidden rounded-xl border bg-card cursor-pointer transition-all hover:shadow-md hover:border-primary/30'
+      className={cn(
+        'group relative overflow-hidden rounded-xl border bg-card cursor-pointer transition-all hover:shadow-md hover:border-primary/30',
+        selectable && selected && 'ring-2 ring-primary border-primary/50'
+      )}
     >
+      {selectable && (
+        <button
+          type='button'
+          role='checkbox'
+          aria-checked={!!selected}
+          aria-label={`Selecionar ${candidate.name}`}
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleSelect?.();
+          }}
+          className='absolute top-2 left-2 z-10 flex size-11 items-center justify-center rounded-md bg-black/40 backdrop-blur-sm'
+        >
+          <span
+            className={cn(
+              'flex size-5 items-center justify-center rounded-[4px] border shadow-xs transition-colors',
+              selected ? 'border-primary bg-primary text-primary-foreground' : 'border-white/80'
+            )}
+          >
+            {selected && <Icons.check className='size-3.5' />}
+          </span>
+        </button>
+      )}
+
       {/* Photo */}
       {candidate.photo_signed_url ? (
         <div className='relative group/photo'>
