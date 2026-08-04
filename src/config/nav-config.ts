@@ -71,6 +71,23 @@ export const navGroups: NavGroup[] = [
     ]
   },
   {
+    label: 'Projetos',
+    minRank: 0,
+    allowedSectors: ['projetos'],
+    items: [
+      {
+        title: 'Projetos',
+        url: '/dashboard/projects',
+        icon: 'settings',
+        shortcut: ['p', 'j'],
+        isActive: false,
+        items: [],
+        minRank: 0,
+        allowedSectors: ['projetos']
+      }
+    ]
+  },
+  {
     label: 'Comercial',
     minRank: 0,
     allowedSectors: ['comercial'],

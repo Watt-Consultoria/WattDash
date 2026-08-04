@@ -20,7 +20,7 @@ import { ActivitiesRepository } from '@/repositories/activities.repository';
 import type { Activity } from '@/repositories/activities.repository';
 import { toUserMessage } from '@/lib/api-client';
 import { TimeSelect } from './time-select';
-import { DateField } from './date-field';
+import { DateField } from '@/components/date-field';
 
 const priorityOptions = [
   { value: 'alta', label: 'Alta' },

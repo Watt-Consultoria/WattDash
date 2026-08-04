@@ -15,7 +15,7 @@ import { ActivitiesRepository } from '@/repositories/activities.repository';
 import { toUserMessage } from '@/lib/api-client';
 import { cn } from '@/lib/utils';
 import { TimeSelect } from './time-select';
-import { DateField } from './date-field';
+import { DateField } from '@/components/date-field';
 
 const priorityOptions = [
   {

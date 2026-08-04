@@ -24,15 +24,18 @@ interface DateFieldProps {
   onBlur?: () => void;
   placeholder?: string;
   className?: string;
+  disabled?: boolean;
 }
 
+/** Campo de data com exibição sempre em pt-BR (dd/mm/aaaa), independente do locale do navegador. */
 export function DateField({
   id,
   value,
   onChange,
   onBlur,
   placeholder = 'dd/mm/aaaa',
-  className
+  className,
+  disabled
 }: DateFieldProps) {
   const [open, setOpen] = useState(false);
   const selected = value ? new Date(value + 'T00:00:00') : undefined;
@@ -50,6 +53,7 @@ export function DateField({
           id={id}
           type='button'
           variant='outline'
+          disabled={disabled}
           className={cn(
             'w-full justify-start gap-2 font-normal',
             !value && 'text-muted-foreground',

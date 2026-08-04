@@ -40,6 +40,20 @@ function useAll() {
   });
 }
 
+/**
+ * Lista de usuários para uso em seletores (ex.: atribuição de consultor a uma etapa).
+ * `GET /users` não tem restrição de rank no backend — ao contrário de `useAll`,
+ * que é restrito a rank >= 3 apenas para a página de administração de usuários.
+ */
+function useSelectable() {
+  const token = useAccessToken();
+  return useQuery({
+    queryKey: keys.all(),
+    queryFn: () => getAll(token),
+    enabled: !!token
+  });
+}
+
 function useOne(id: string) {
   const token = useAccessToken();
   const { rank } = useUserProfile();
@@ -87,6 +101,7 @@ export const UserRepository = {
   updateOne,
   deleteOne,
   useAll,
+  useSelectable,
   useOne,
   useUpdateOne,
   useDeleteOne,

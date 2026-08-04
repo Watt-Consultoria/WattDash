@@ -13,28 +13,29 @@ function Calendar({
   className,
   classNames,
   showOutsideDays = true,
+  navLayout = 'around',
   ...props
 }: ComponentProps<typeof DayPicker>) {
   return (
     <DayPicker
       locale={ptBR}
       showOutsideDays={showOutsideDays}
+      navLayout={navLayout}
       className={cn('p-3', className)}
       classNames={{
         months: 'flex flex-col sm:flex-row gap-2',
-        month: 'flex flex-col gap-4',
-        month_caption: 'flex justify-center pt-1 relative items-center w-full',
+        month: 'grid grid-cols-[auto_1fr_auto] items-center gap-y-4',
+        month_caption: 'flex justify-center items-center',
         caption_label: 'text-sm font-medium',
-        nav: 'flex items-center gap-1',
         button_previous: cn(
           buttonVariants({ variant: 'outline' }),
-          'absolute left-1 size-7 bg-transparent p-0 opacity-50 hover:opacity-100'
+          'size-7 bg-transparent p-0 opacity-50 hover:opacity-100'
         ),
         button_next: cn(
           buttonVariants({ variant: 'outline' }),
-          'absolute right-1 size-7 bg-transparent p-0 opacity-50 hover:opacity-100'
+          'size-7 bg-transparent p-0 opacity-50 hover:opacity-100'
         ),
-        month_grid: 'w-full border-collapse space-x-1',
+        month_grid: 'col-span-3 w-full border-collapse space-x-1',
         weekdays: 'flex',
         weekday: 'text-muted-foreground rounded-md w-8 font-normal text-[0.8rem]',
         week: 'flex w-full mt-2',
