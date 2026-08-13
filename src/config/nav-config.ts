@@ -116,7 +116,7 @@ export const navGroups: NavGroup[] = [
   },
   {
     label: 'Administração',
-    minRank: 3,
+    minRank: 1,
     items: [
       {
         title: 'Usuários',
