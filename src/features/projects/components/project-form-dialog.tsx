@@ -23,9 +23,19 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList
+} from '@/components/ui/command';
 import { Icons } from '@/components/icons';
 import { ProjectsRepository } from '@/repositories/projects.repository';
 import { toUserMessage } from '@/lib/api-client';
+import { cn } from '@/lib/utils';
 
 interface ProjectFormDialogProps {
   open: boolean;
@@ -39,10 +49,13 @@ export function ProjectFormDialog({ open, onOpenChange }: ProjectFormDialogProps
   const portfolioItems = lookups?.portfolio_items ?? [];
 
   const [leadId, setLeadId] = useState('');
+  const [leadPopoverOpen, setLeadPopoverOpen] = useState(false);
   const [projectTypeId, setProjectTypeId] = useState('');
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [deliveryDate, setDeliveryDate] = useState('');
+
+  const selectedLead = leads.find((lead) => lead.id === leadId);
 
   const isPending = createMutation.isPending;
   const canSubmit = leadId && projectTypeId && name.trim() && deliveryDate && !isPending;
@@ -50,6 +63,7 @@ export function ProjectFormDialog({ open, onOpenChange }: ProjectFormDialogProps
   useEffect(() => {
     if (open) {
       setLeadId('');
+      setLeadPopoverOpen(false);
       setProjectTypeId('');
       setName('');
       setDescription('');
@@ -106,18 +120,53 @@ export function ProjectFormDialog({ open, onOpenChange }: ProjectFormDialogProps
                 <Icons.building className='text-muted-foreground size-3.5' />
                 Lead *
               </Label>
-              <Select value={leadId} onValueChange={setLeadId}>
-                <SelectTrigger className='w-full'>
-                  <SelectValue placeholder='Selecione um lead' />
-                </SelectTrigger>
-                <SelectContent>
-                  {leads.map((lead) => (
-                    <SelectItem key={lead.id} value={lead.id}>
-                      {lead.company_name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Popover open={leadPopoverOpen} onOpenChange={setLeadPopoverOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    type='button'
+                    variant='outline'
+                    role='combobox'
+                    aria-expanded={leadPopoverOpen}
+                    className='w-full justify-between font-normal'
+                  >
+                    <span className={cn('truncate', !selectedLead && 'text-muted-foreground')}>
+                      {selectedLead ? selectedLead.company_name : 'Selecione um lead'}
+                    </span>
+                    <Icons.chevronsUpDown className='text-muted-foreground size-4 shrink-0 opacity-50' />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent
+                  className='w-[var(--radix-popover-trigger-width)] p-0'
+                  align='start'
+                >
+                  <Command>
+                    <CommandInput placeholder='Buscar lead...' />
+                    <CommandList>
+                      <CommandEmpty>Nenhum lead encontrado.</CommandEmpty>
+                      <CommandGroup>
+                        {leads.map((lead) => (
+                          <CommandItem
+                            key={lead.id}
+                            value={lead.company_name}
+                            onSelect={() => {
+                              setLeadId(lead.id);
+                              setLeadPopoverOpen(false);
+                            }}
+                          >
+                            <Icons.check
+                              className={cn(
+                                'size-4',
+                                leadId === lead.id ? 'opacity-100' : 'opacity-0'
+                              )}
+                            />
+                            <span className='truncate'>{lead.company_name}</span>
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
             </div>
 
             <div className='space-y-1.5'>
