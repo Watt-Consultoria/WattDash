@@ -119,6 +119,15 @@ export const navGroups: NavGroup[] = [
     minRank: 1,
     items: [
       {
+        title: 'Carteira Watt',
+        url: '/dashboard/carteira',
+        icon: 'wallet',
+        shortcut: ['c', 'w'],
+        isActive: false,
+        items: [],
+        minRank: 2
+      },
+      {
         title: 'Usuários',
         url: '/dashboard/users',
         icon: 'teams',

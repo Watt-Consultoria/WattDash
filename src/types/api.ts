@@ -113,6 +113,8 @@ export interface Reimbursement {
   category: ReimbursementCategory;
   pix_key: string;
   status: ReimbursementStatus;
+  paid_amount_cents: number | null;
+  partial_reason: string | null;
   attachments: ReimbursementAttachment[];
   created_at: string;
   updated_at: string;
@@ -129,6 +131,57 @@ export interface CreateReimbursementPayload {
 
 export interface UpdateReimbursementStatusPayload {
   status: 'approved' | 'rejected';
+  account_id?: string;
+  paid_amount_cents?: number;
+  partial_reason?: string;
+}
+
+// Wallet
+
+export type WalletAccountType = 'checking' | 'savings' | 'credit_card' | 'investment' | 'cash';
+
+export type WalletTransactionType = 'income' | 'expense';
+
+export interface WalletAccount {
+  id: string;
+  name: string;
+  type: WalletAccountType;
+  balance_cents: number;
+  created_by: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface WalletTransaction {
+  id: string;
+  account_id: string;
+  type: WalletTransactionType;
+  amount_cents: number;
+  category: ReimbursementCategory;
+  description: string;
+  transaction_date: string;
+  created_by: string;
+  created_at: string;
+}
+
+export interface CreateWalletAccountPayload {
+  name: string;
+  type: WalletAccountType;
+  balance_cents?: number;
+}
+
+export interface UpdateWalletAccountPayload {
+  name?: string;
+  type?: WalletAccountType;
+}
+
+export interface CreateWalletTransactionPayload {
+  account_id: string;
+  type: WalletTransactionType;
+  amount_cents: number;
+  category: ReimbursementCategory;
+  description: string;
+  transaction_date: string;
 }
 
 // Portfolio

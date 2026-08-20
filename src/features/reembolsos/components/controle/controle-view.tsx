@@ -121,9 +121,15 @@ export function ControleView() {
       rejected = 0;
     for (const { reimbursement } of filtered) {
       total += reimbursement.amount_cents;
-      if (reimbursement.status === 'approved') approved += reimbursement.amount_cents;
-      else if (reimbursement.status === 'pending') pending += reimbursement.amount_cents;
-      else if (reimbursement.status === 'rejected') rejected += reimbursement.amount_cents;
+      if (reimbursement.status === 'approved') {
+        const paid = reimbursement.paid_amount_cents ?? reimbursement.amount_cents;
+        approved += paid;
+        rejected += reimbursement.amount_cents - paid;
+      } else if (reimbursement.status === 'pending') {
+        pending += reimbursement.amount_cents;
+      } else if (reimbursement.status === 'rejected') {
+        rejected += reimbursement.amount_cents;
+      }
     }
     return { total, approved, pending, rejected };
   }, [filtered]);
@@ -132,10 +138,11 @@ export function ControleView() {
     const acc = new Map<string, { name: string; total: number }>();
     for (const { reimbursement, userName } of filtered) {
       if (reimbursement.status !== 'approved') continue;
+      const paid = reimbursement.paid_amount_cents ?? reimbursement.amount_cents;
       const cur = acc.get(reimbursement.user_id) ?? { name: userName, total: 0 };
       acc.set(reimbursement.user_id, {
         name: cur.name,
-        total: cur.total + reimbursement.amount_cents
+        total: cur.total + paid
       });
     }
     return Array.from(acc.values())
@@ -147,10 +154,8 @@ export function ControleView() {
     const acc = new Map<string, number>();
     for (const { reimbursement } of filtered) {
       if (reimbursement.status !== 'approved') continue;
-      acc.set(
-        reimbursement.category,
-        (acc.get(reimbursement.category) ?? 0) + reimbursement.amount_cents
-      );
+      const paid = reimbursement.paid_amount_cents ?? reimbursement.amount_cents;
+      acc.set(reimbursement.category, (acc.get(reimbursement.category) ?? 0) + paid);
     }
     return Array.from(acc.entries())
       .map(([category, total]) => ({

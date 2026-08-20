@@ -9,6 +9,7 @@ import {
   IconBellOff,
   IconBriefcase,
   IconBuilding,
+  IconBuildingBank,
   IconMapPin,
   IconTag,
   IconBold,
@@ -17,6 +18,7 @@ import {
   IconBrandTwitter,
   IconBrightness,
   IconCalendar,
+  IconCash,
   IconCheck,
   IconChecks,
   IconChevronDown,
@@ -39,6 +41,7 @@ import {
   IconDotsVertical,
   IconEdit,
   IconExternalLink,
+  IconEye,
   IconEyeOff,
   IconFile,
   IconFileText,
@@ -96,7 +99,10 @@ import {
   IconVideo,
   IconCrown,
   IconX,
-  IconReceipt
+  IconReceipt,
+  IconWallet,
+  IconPigMoney,
+  IconArrowsExchange
 } from '@tabler/icons-react';
 
 export type Icon = React.ComponentType<IconProps>;
@@ -228,6 +234,11 @@ export const Icons = {
 
   // Finance
   receipt: IconReceipt,
+  wallet: IconWallet,
+  bank: IconBuildingBank,
+  piggyBank: IconPigMoney,
+  cash: IconCash,
+  exchange: IconArrowsExchange,
 
   // Commerce / Plans
   billing: IconCreditCard,
@@ -242,6 +253,7 @@ export const Icons = {
   // Data / Charts
   trendingDown: IconTrendingDown,
   trendingUp: IconTrendingUp,
+  eye: IconEye,
   eyeOff: IconEyeOff,
   adjustments: IconAdjustmentsHorizontal,
 

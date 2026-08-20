@@ -100,6 +100,20 @@ export function ReembolsoControleCard({
               <Icons.calendar className='size-3' />
               <span>{formatDate(reimbursement.created_at)}</span>
             </div>
+
+            {reimbursement.paid_amount_cents != null &&
+              reimbursement.paid_amount_cents < reimbursement.amount_cents && (
+                <div className='mt-2 rounded-md border border-amber-200 bg-amber-50 px-2.5 py-1.5 text-xs dark:border-amber-800 dark:bg-amber-900/20'>
+                  <p className='font-medium text-amber-800 dark:text-amber-400'>
+                    Pago parcialmente: {formatBRL(reimbursement.paid_amount_cents)}
+                  </p>
+                  {reimbursement.partial_reason && (
+                    <p className='mt-0.5 text-amber-700/90 dark:text-amber-400/80'>
+                      {reimbursement.partial_reason}
+                    </p>
+                  )}
+                </div>
+              )}
           </div>
 
           {/* Attachments */}

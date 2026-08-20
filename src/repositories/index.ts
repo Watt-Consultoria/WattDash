@@ -30,3 +30,4 @@ export type {
   SendNotificationResponse
 } from './notifications.repository';
 export { SelectionProcessRepository } from './selection-process.repository';
+export { WalletRepository } from './wallet.repository';

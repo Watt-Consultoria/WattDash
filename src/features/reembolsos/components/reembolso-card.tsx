@@ -62,6 +62,20 @@ export function ReembolsoCard({ reimbursement }: ReembolsoCardProps) {
         <p className='text-muted-foreground mt-3 text-sm'>{reimbursement.description}</p>
       )}
 
+      {reimbursement.paid_amount_cents != null &&
+        reimbursement.paid_amount_cents < reimbursement.amount_cents && (
+          <div className='mt-3 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs dark:border-amber-800 dark:bg-amber-900/20'>
+            <p className='font-medium text-amber-800 dark:text-amber-400'>
+              Pago parcialmente: {formatBRL(reimbursement.paid_amount_cents)}
+            </p>
+            {reimbursement.partial_reason && (
+              <p className='mt-0.5 text-amber-700/90 dark:text-amber-400/80'>
+                {reimbursement.partial_reason}
+              </p>
+            )}
+          </div>
+        )}
+
       {reimbursement.attachments.length > 0 && (
         <div className='mt-3 flex flex-wrap gap-2'>
           {reimbursement.attachments.map((att) => (
