@@ -3,6 +3,7 @@ import {
   IconAdjustmentsHorizontal,
   IconAlertCircle,
   IconArrowsMaximize,
+  IconArrowsMinimize,
   IconAlertTriangle,
   IconArrowRight,
   IconBell,
@@ -279,5 +280,6 @@ export const Icons = {
   galleryVerticalEnd: IconStack2,
   trophy: IconTrophyFilled,
   moreHorizontal: IconDots,
-  maximize: IconArrowsMaximize
+  maximize: IconArrowsMaximize,
+  minimize: IconArrowsMinimize
 };

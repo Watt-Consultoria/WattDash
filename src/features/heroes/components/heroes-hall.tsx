@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { HeroesRepository } from '@/repositories/heroes.repository';
+import { Icons } from '@/components/icons';
 import { HeroFeaturedSlide } from './hero-featured-slide';
 import { HeroRoster } from './hero-roster';
 import { BoltIcon, LaurelIcon } from './hero-icons';
@@ -45,6 +46,7 @@ function HeroesHallEmpty() {
 export function HeroesHall() {
   const { data: heroes = [], isLoading } = HeroesRepository.useHeroes();
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isKioskMode, setIsKioskMode] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const start = useCallback(() => {
@@ -94,31 +96,53 @@ export function HeroesHall() {
         }}
       />
 
-      <div className='relative mx-auto max-w-5xl px-5 pt-14 pb-16 sm:px-8 sm:pt-20 lg:px-12 lg:pt-24'>
-        <header className='text-center'>
-          <div className='mb-5 flex justify-center'>
-            <LaurelIcon className='h-14 w-auto sm:h-[70px]' />
-          </div>
-          <div className='mb-4 flex items-center justify-center gap-2 text-[11px] font-semibold tracking-[0.3em] text-[#d9b45b] uppercase sm:text-xs sm:tracking-[0.34em]'>
-            <BoltIcon className='size-3' />
-            Watt Consultoria Júnior
-            <BoltIcon className='size-3' />
-          </div>
-          <h1 className='font-[family-name:var(--herois-font-serif)] text-[44px] leading-[0.94] font-medium tracking-tight text-[#f7f3e9] sm:text-6xl lg:text-[88px]'>
-            Salão dos Heróis
-          </h1>
-          <p className='mx-auto mt-4 max-w-xl font-[family-name:var(--herois-font-serif)] text-sm leading-relaxed text-[#f4f1ea]/55 italic sm:text-base lg:text-[17px]'>
-            Àqueles que ergueram a Watt com as próprias mãos e depois seguiram novos caminhos — a
-            chama que acenderam ainda ilumina cada projeto que nasce por aqui.
-          </p>
-          <div className='mt-7 flex items-center justify-center gap-3.5'>
-            <span className='h-px w-12 bg-gradient-to-r from-transparent to-[#d9b45b]/45 sm:w-16' />
-            <BoltIcon className='size-3.5' />
-            <span className='h-px w-12 bg-gradient-to-l from-transparent to-[#d9b45b]/45 sm:w-16' />
-          </div>
-        </header>
+      <button
+        type='button'
+        onClick={() => setIsKioskMode((v) => !v)}
+        title={isKioskMode ? 'Sair do modo tela de descanso' : 'Modo tela de descanso'}
+        aria-label={isKioskMode ? 'Sair do modo tela de descanso' : 'Modo tela de descanso'}
+        className='fixed top-5 right-5 z-20 flex size-10 items-center justify-center rounded-full border border-[#d9b45b]/20 bg-[#0c0c0c]/70 text-[#d9b45b] backdrop-blur transition-colors hover:border-[#d9b45b]/50 hover:bg-[#0c0c0c] sm:top-6 sm:right-6'
+      >
+        {isKioskMode ? (
+          <Icons.minimize className='size-4' />
+        ) : (
+          <Icons.maximize className='size-4' />
+        )}
+      </button>
 
-        <main className='mt-10 sm:mt-14'>
+      <div
+        className={`relative mx-auto max-w-5xl px-5 sm:px-8 lg:px-12 ${
+          isKioskMode
+            ? 'flex min-h-svh flex-col justify-center py-10'
+            : 'pt-14 pb-16 sm:pt-20 lg:pt-24'
+        }`}
+      >
+        {!isKioskMode && (
+          <header className='text-center'>
+            <div className='mb-5 flex justify-center'>
+              <LaurelIcon className='h-14 w-auto sm:h-[70px]' />
+            </div>
+            <div className='mb-4 flex items-center justify-center gap-2 text-[11px] font-semibold tracking-[0.3em] text-[#d9b45b] uppercase sm:text-xs sm:tracking-[0.34em]'>
+              <BoltIcon className='size-3' />
+              Watt Consultoria Júnior
+              <BoltIcon className='size-3' />
+            </div>
+            <h1 className='font-[family-name:var(--herois-font-serif)] text-[44px] leading-[0.94] font-medium tracking-tight text-[#f7f3e9] sm:text-6xl lg:text-[88px]'>
+              Salão dos Heróis
+            </h1>
+            <p className='mx-auto mt-4 max-w-xl font-[family-name:var(--herois-font-serif)] text-sm leading-relaxed text-[#f4f1ea]/55 italic sm:text-base lg:text-[17px]'>
+              Àqueles que ergueram a Watt com as próprias mãos e depois seguiram novos caminhos — a
+              chama que acenderam ainda ilumina cada projeto que nasce por aqui.
+            </p>
+            <div className='mt-7 flex items-center justify-center gap-3.5'>
+              <span className='h-px w-12 bg-gradient-to-r from-transparent to-[#d9b45b]/45 sm:w-16' />
+              <BoltIcon className='size-3.5' />
+              <span className='h-px w-12 bg-gradient-to-l from-transparent to-[#d9b45b]/45 sm:w-16' />
+            </div>
+          </header>
+        )}
+
+        <main className={isKioskMode ? '' : 'mt-10 sm:mt-14'}>
           {isLoading ? (
             <HeroesHallLoading />
           ) : heroes.length === 0 ? (
@@ -168,39 +192,43 @@ export function HeroesHall() {
                 )}
               </section>
 
-              <section className='mt-10 sm:mt-14'>
-                <div className='mb-5 flex items-center gap-4'>
-                  <span className='text-[11px] font-semibold tracking-[0.32em] text-[#f4f1ea]/40 uppercase sm:text-xs'>
-                    O mural
-                  </span>
-                  <span className='h-px flex-1 bg-white/[0.08]' />
-                  <span className='text-[11.5px] text-[#f4f1ea]/38'>
-                    {heroes.length} {heroes.length === 1 ? 'veterano' : 'veteranos'}
-                  </span>
-                </div>
-                <HeroRoster
-                  heroes={heroes}
-                  activeId={active?.id ?? ''}
-                  onSelect={(id) => jump(heroes.findIndex((hero) => hero.id === id))}
-                />
-              </section>
+              {!isKioskMode && (
+                <section className='mt-10 sm:mt-14'>
+                  <div className='mb-5 flex items-center gap-4'>
+                    <span className='text-[11px] font-semibold tracking-[0.32em] text-[#f4f1ea]/40 uppercase sm:text-xs'>
+                      O mural
+                    </span>
+                    <span className='h-px flex-1 bg-white/[0.08]' />
+                    <span className='text-[11.5px] text-[#f4f1ea]/38'>
+                      {heroes.length} {heroes.length === 1 ? 'veterano' : 'veteranos'}
+                    </span>
+                  </div>
+                  <HeroRoster
+                    heroes={heroes}
+                    activeId={active?.id ?? ''}
+                    onSelect={(id) => jump(heroes.findIndex((hero) => hero.id === id))}
+                  />
+                </section>
+              )}
             </>
           )}
         </main>
 
-        <footer className='relative pt-16 pb-4 text-center sm:pt-20'>
-          <div className='mb-5 flex items-center justify-center gap-4'>
-            <span className='h-px w-11 bg-gradient-to-r from-transparent to-[#d9b45b]/50 sm:w-14' />
-            <BoltIcon className='size-3.5' />
-            <span className='h-px w-11 bg-gradient-to-l from-transparent to-[#d9b45b]/50 sm:w-14' />
-          </div>
-          <p className='mx-auto max-w-md font-[family-name:var(--herois-font-serif)] text-lg leading-relaxed text-[#f4f1ea]/60 italic sm:text-xl'>
-            &ldquo;Uma vez Watt, para sempre Watt.&rdquo;
-          </p>
-          <div className='mt-3.5 text-[11px] font-semibold tracking-[0.3em] text-[#f4f1ea]/35 uppercase'>
-            Com gratidão eterna
-          </div>
-        </footer>
+        {!isKioskMode && (
+          <footer className='relative pt-16 pb-4 text-center sm:pt-20'>
+            <div className='mb-5 flex items-center justify-center gap-4'>
+              <span className='h-px w-11 bg-gradient-to-r from-transparent to-[#d9b45b]/50 sm:w-14' />
+              <BoltIcon className='size-3.5' />
+              <span className='h-px w-11 bg-gradient-to-l from-transparent to-[#d9b45b]/50 sm:w-14' />
+            </div>
+            <p className='mx-auto max-w-md font-[family-name:var(--herois-font-serif)] text-lg leading-relaxed text-[#f4f1ea]/60 italic sm:text-xl'>
+              &ldquo;Uma vez Watt, para sempre Watt.&rdquo;
+            </p>
+            <div className='mt-3.5 text-[11px] font-semibold tracking-[0.3em] text-[#f4f1ea]/35 uppercase'>
+              Com gratidão eterna
+            </div>
+          </footer>
+        )}
       </div>
     </div>
   );
