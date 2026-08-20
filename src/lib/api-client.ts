@@ -39,6 +39,28 @@ export class NetworkError extends Error {
   }
 }
 
+async function parseResponse<T>(res: Response): Promise<T> {
+  if (!res.ok) {
+    let message = statusMessage(res.status);
+    if (res.status < 500) {
+      try {
+        const json = await res.json();
+        if (typeof json.message === 'string') {
+          message = json.message;
+        } else if (Array.isArray(json.message)) {
+          message = json.message.join(', ');
+        }
+      } catch {}
+    }
+    throw new ApiError(res.status, message);
+  }
+
+  if (res.status === 204) return undefined as T;
+  const text = await res.text();
+  if (!text.trim()) return undefined as T;
+  return JSON.parse(text) as T;
+}
+
 async function request<T>(
   method: string,
   path: string,
@@ -61,29 +83,27 @@ async function request<T>(
     throw new NetworkError(cause);
   }
 
-  if (!res.ok) {
-    let message = statusMessage(res.status);
-    if (res.status < 500) {
-      try {
-        const json = await res.json();
-        if (typeof json.message === 'string') {
-          message = json.message;
-        } else if (Array.isArray(json.message)) {
-          message = json.message.join(', ');
-        }
-      } catch {}
-    }
-    throw new ApiError(res.status, message);
+  return parseResponse<T>(res);
+}
+
+/**
+ * GET para rotas públicas (sem Authorization) — ex.: página institucional /herois.
+ */
+async function requestPublic<T>(path: string): Promise<T> {
+  let res: Response;
+  try {
+    res = await fetch(`${BASE_URL}${path}`);
+  } catch (cause) {
+    throw new NetworkError(cause);
   }
 
-  if (res.status === 204) return undefined as T;
-  const text = await res.text();
-  if (!text.trim()) return undefined as T;
-  return JSON.parse(text) as T;
+  return parseResponse<T>(res);
 }
 
 export const apiGet = <T>(path: string, token: string | null | undefined) =>
   request<T>('GET', path, token);
+
+export const apiGetPublic = <T>(path: string) => requestPublic<T>(path);
 
 export const apiPost = <T>(path: string, token: string | null | undefined, body?: unknown) =>
   request<T>('POST', path, token, body);

@@ -151,6 +151,10 @@ export function SidebarUserFooter() {
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => router.push('/dashboard/configuracoes')}>
+                <Icons.settings className='mr-2 h-4 w-4' />
+                Configurações
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={handleLogout}>
                 <Icons.logout className='mr-2 h-4 w-4' />
                 Sair

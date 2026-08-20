@@ -7,7 +7,8 @@ import type { UserResponse, UpdateUserPayload } from '@/types/api';
 
 const keys = {
   all: () => ['users'] as const,
-  one: (id: string) => ['users', id] as const
+  one: (id: string) => ['users', id] as const,
+  inactive: () => ['users', 'inactive'] as const
 };
 
 async function getAll(token: string): Promise<UserResponse[]> {
@@ -16,6 +17,10 @@ async function getAll(token: string): Promise<UserResponse[]> {
 
 async function getOne(token: string, id: string): Promise<UserResponse> {
   return apiGet<UserResponse>(`/users/${id}`, token);
+}
+
+async function getInactive(token: string): Promise<UserResponse[]> {
+  return apiGet<UserResponse[]>('/users/inactive', token);
 }
 
 async function updateOne(
@@ -51,6 +56,20 @@ function useSelectable() {
     queryKey: keys.all(),
     queryFn: () => getAll(token),
     enabled: !!token
+  });
+}
+
+/**
+ * Usuários inativos (soft-deletados) — usado para selecionar quem pode virar
+ * um herói em `/dashboard/configuracoes/herois`.
+ */
+function useInactive() {
+  const token = useAccessToken();
+  const { rank } = useUserProfile();
+  return useQuery({
+    queryKey: keys.inactive(),
+    queryFn: () => getInactive(token),
+    enabled: !!token && rank >= 3
   });
 }
 
@@ -102,6 +121,7 @@ export const UserRepository = {
   deleteOne,
   useAll,
   useSelectable,
+  useInactive,
   useOne,
   useUpdateOne,
   useDeleteOne,

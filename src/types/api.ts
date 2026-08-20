@@ -293,6 +293,39 @@ export interface UpdateContactPayload {
   phone?: string | null;
 }
 
+// Heroes
+
+export interface Hero {
+  id: string;
+  user_id: string;
+  name: string;
+  role: string;
+  phrase: string;
+  contributions: string[];
+  start_year: number;
+  end_year: number;
+  photo_url: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CreateHeroPayload {
+  user_id: string;
+  phrase: string;
+  contributions: string[];
+  start_year: number;
+  end_year: number;
+  photo_path: string;
+}
+
+export interface UpdateHeroPayload {
+  phrase?: string;
+  contributions?: string[];
+  start_year?: number;
+  end_year?: number;
+  photo_path?: string;
+}
+
 export interface ReceitaWSData {
   cnpj: string;
   tipo: string;

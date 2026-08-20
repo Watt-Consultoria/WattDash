@@ -7,9 +7,11 @@ import { useUserProfile } from '@/components/providers/user-profile-provider';
 interface RoleGuardProps {
   minRank: number;
   children: React.ReactNode;
+  /** Conteúdo exibido enquanto o rank do usuário carrega. Padrão: spinner centralizado. */
+  fallback?: React.ReactNode;
 }
 
-export function RoleGuard({ minRank, children }: RoleGuardProps) {
+export function RoleGuard({ minRank, children, fallback }: RoleGuardProps) {
   const { rank, isLoading } = useUserProfile();
   const router = useRouter();
 
@@ -21,9 +23,11 @@ export function RoleGuard({ minRank, children }: RoleGuardProps) {
 
   if (isLoading) {
     return (
-      <div className='flex h-48 items-center justify-center'>
-        <div className='border-primary h-8 w-8 animate-spin rounded-full border-4 border-t-transparent' />
-      </div>
+      fallback ?? (
+        <div className='flex h-48 items-center justify-center'>
+          <div className='border-primary h-8 w-8 animate-spin rounded-full border-4 border-t-transparent' />
+        </div>
+      )
     );
   }
 
