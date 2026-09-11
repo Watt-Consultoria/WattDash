@@ -52,7 +52,11 @@ export function RankingTab() {
   }
 
   // TEMP: offset manual de pontos históricos anteriores ao sistema
-  const HOUSE_OFFSET: Record<string, number> = { lumina: 710, voltus: 650, nexus: 105 };
+  const HOUSE_OFFSET: Record<string, number> = {
+    lumina: 850,
+    voltus: 650,
+    nexus: 105
+  };
   const withOffset = leaderboard.map((entry) => ({
     ...entry,
     total_points: entry.total_points + (HOUSE_OFFSET[entry.house_name.toLowerCase()] ?? 0)
