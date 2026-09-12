@@ -53,7 +53,7 @@ export function RankingTab() {
 
   // TEMP: offset manual de pontos históricos anteriores ao sistema
   const HOUSE_OFFSET: Record<string, number> = {
-    lumina: 850,
+    lumina: 1050,
     voltus: 650,
     nexus: 105
   };
