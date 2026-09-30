@@ -84,6 +84,16 @@ export const navGroups: NavGroup[] = [
         items: [],
         minRank: 0,
         allowedSectors: ['projetos']
+      },
+      {
+        title: 'Almoxarifado',
+        url: '/dashboard/almoxarifado',
+        icon: 'package',
+        shortcut: ['a', 'x'],
+        isActive: false,
+        items: [],
+        minRank: 0,
+        allowedSectors: ['projetos']
       }
     ]
   },

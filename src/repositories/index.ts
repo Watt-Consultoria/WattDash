@@ -31,3 +31,4 @@ export type {
 } from './notifications.repository';
 export { SelectionProcessRepository } from './selection-process.repository';
 export { WalletRepository } from './wallet.repository';
+export { AlmoxarifadoRepository } from './almoxarifado.repository';

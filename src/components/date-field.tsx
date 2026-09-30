@@ -25,6 +25,10 @@ interface DateFieldProps {
   placeholder?: string;
   className?: string;
   disabled?: boolean;
+  /** Primeira data selecionável (yyyy-mm-dd), inclusiva. */
+  minDate?: string;
+  /** Última data selecionável (yyyy-mm-dd), inclusiva. */
+  maxDate?: string;
 }
 
 /** Campo de data com exibição sempre em pt-BR (dd/mm/aaaa), independente do locale do navegador. */
@@ -35,10 +39,16 @@ export function DateField({
   onBlur,
   placeholder = 'dd/mm/aaaa',
   className,
-  disabled
+  disabled,
+  minDate,
+  maxDate
 }: DateFieldProps) {
   const [open, setOpen] = useState(false);
   const selected = value ? new Date(value + 'T00:00:00') : undefined;
+  const disabledDays = [
+    ...(minDate ? [{ before: new Date(minDate + 'T00:00:00') }] : []),
+    ...(maxDate ? [{ after: new Date(maxDate + 'T00:00:00') }] : [])
+  ];
 
   return (
     <Popover
@@ -69,6 +79,7 @@ export function DateField({
           mode='single'
           selected={selected}
           defaultMonth={selected}
+          disabled={disabledDays.length > 0 ? disabledDays : undefined}
           onSelect={(day) => {
             if (!day) return;
             onChange(toISODate(day));
