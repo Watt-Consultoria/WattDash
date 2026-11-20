@@ -33,12 +33,12 @@ export default function PselInscricaoPage() {
             Todas as regras e orientações do nosso Processo Seletivo estão documentadas e podem ser
             consultadas no seguinte edital:{' '}
             <a
-              href='https://drive.google.com/file/d/1r4LZt_fyMn7g33hrb_EuaOJb7peCjYg_/view?usp=drive_link'
+              href='https://drive.google.com/file/d/1_8OZdOwjGURtnTXH8WWudOTEhBhLGMTp/view'
               target='_blank'
               rel='noopener noreferrer'
               className='underline font-medium'
             >
-              Edital PSEL 2026.1
+              Edital PSEL 2027.1
             </a>
           </p>
         </AlertDescription>
